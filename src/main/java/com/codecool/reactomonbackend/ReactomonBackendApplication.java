@@ -1,6 +1,6 @@
 package com.codecool.reactomonbackend;
 
-import com.codecool.reactomonbackend.service.ApiConverter;
+import com.codecool.reactomonbackend.service.ApiDataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,12 +16,12 @@ public class ReactomonBackendApplication {
     }
 
     @Autowired
-    private ApiConverter apiConverter;
+    private ApiDataConverter apiDataConverter;
 
     @Bean
     @Profile("production")
     public CommandLineRunner init() {
         return args -> {
-            System.out.println(apiConverter.createEntityFromApiData(1));
+            System.out.println(apiDataConverter.createEntityFromApiData(1));
         };}
 }

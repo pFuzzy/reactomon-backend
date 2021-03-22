@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ApiConverter {
+public class ApiDataConverter {
     public Pokemon createEntityFromApiData(int pokemonId){
         RestTemplate restTemplate = new RestTemplate();
         PokemonModel pokemonModel = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/1", PokemonModel.class);
