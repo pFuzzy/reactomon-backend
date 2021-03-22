@@ -1,9 +1,7 @@
 package com.codecool.reactomonbackend.entity;
 
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Pokemon {
 
@@ -21,15 +20,18 @@ public class Pokemon {
     private String name;
 
     @ElementCollection
+    @Singular
     private List<String> types;
 
     @ElementCollection
+    @Singular
     private List<String> sprites;
 
     @ElementCollection
+    @Singular
     private List<String> abilities;
 
     private int height;
 
-    private int width;
+    private int weight;
 }
