@@ -10,34 +10,41 @@ import java.util.List;
 
 @Service
 public class ApiDataConverter {
-    public Pokemon createEntityFromApiData(int pokemonId){
-        RestTemplate restTemplate = new RestTemplate();
-        PokemonModel pokemonModel = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/1", PokemonModel.class);
+    public Pokemon createEntityFromApiData(int pokemonId) throws Exception {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String baseUrl = "https://pokeapi.co/api/v2/pokemon/";
 
-        String pokemonName = pokemonModel.getName();
-        int pokemonHeight = pokemonModel.getHeight();
-        int pokemonWeight = pokemonModel.getWeight();
-        Sprites sprites = pokemonModel.getSprites();
-        List<PokemonAbility> abilities = pokemonModel.getAbilities();
-        List<PokemonType> types = pokemonModel.getTypes();
+            PokemonModel pokemonModel = restTemplate.getForObject(baseUrl + pokemonId, PokemonModel.class);
 
-        Pokemon newPokemonEntity = Pokemon.builder()
-                .name(pokemonName)
-                .height(pokemonHeight)
-                .weight(pokemonWeight)
-                .sprite(sprites.getBack_default())
-                .sprite(sprites.getFront_default())
-                .build();
-        List<String> abilityNames = new ArrayList<>();
-        for (PokemonAbility pokemonAbility: abilities) {
-            abilityNames.add(pokemonAbility.getAbility().getName());
+            String pokemonName = pokemonModel.getName();
+            int pokemonHeight = pokemonModel.getHeight();
+            int pokemonWeight = pokemonModel.getWeight();
+            Sprites sprites = pokemonModel.getSprites();
+            List<PokemonAbility> abilities = pokemonModel.getAbilities();
+            List<PokemonType> types = pokemonModel.getTypes();
+
+            Pokemon newPokemonEntity = Pokemon.builder()
+                    .name(pokemonName)
+                    .height(pokemonHeight)
+                    .weight(pokemonWeight)
+                    .sprite(sprites.getBack_default())
+                    .sprite(sprites.getFront_default())
+                    .build();
+            List<String> abilityNames = new ArrayList<>();
+            for (PokemonAbility pokemonAbility : abilities) {
+                abilityNames.add(pokemonAbility.getAbility().getName());
+            }
+            newPokemonEntity.setAbilities(abilityNames);
+            List<String> pokemonTypeNames = new ArrayList<>();
+            for (PokemonType type : types) {
+                pokemonTypeNames.add(type.getType().getName());
+            }
+            newPokemonEntity.setTypes(pokemonTypeNames);
+            return newPokemonEntity;
         }
-        newPokemonEntity.setAbilities(abilityNames);
-        List<String> pokemonTypeNames = new ArrayList<>();
-        for(PokemonType type : types){
-            pokemonTypeNames.add(type.getType().getName());
+        catch(Exception e){
+            throw new Exception("Something is fucked up fam");
         }
-        newPokemonEntity.setTypes(pokemonTypeNames);
-        return newPokemonEntity;
     }
 }
